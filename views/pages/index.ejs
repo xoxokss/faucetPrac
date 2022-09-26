@@ -1,81 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
 
-<head>
-  <%- include('../partials/head'); %>
-</head>
+  <body class="container">
+    <header><%- include('../partials/header'); %></header>
 
-<body class="container">
-
-  <header>
-    <%- include('../partials/header'); %>
-  </header>
-
-  <main>
-    <div class="jumbotron">
-      <h3>Get Test Tokens</h3>
-      <div class="description">This faucet transfers TestToken on Chrono testnets and parent chain. Confirm details
-        before submitting.</div>
-      <div class="h5">Chrono Network NCG Token</div>
-      <div class="mb-3">
-        <div class="h5">Wallet Address</div>
-        <h1>
-          <%= one %>
-        </h1>
-        <div class="input-box">
-          <input class="form-control form-control-lg" type="text" name="walletAddress" id="input1" maxlength="40"
-            placeholder="0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" aria-label=".form-control-lg example">
-          <input type="submit" , value="Submit">
+    <main>
+      <div class="jumbotron">
+        <h3>Home Page</h3>
+        <div class="description">
+          This faucet transfers TestToken on Chrono testnets and parent chain.
+          Confirm details before submitting.
         </div>
-
+        <div class="h5">Chrono Network NCG Token</div>
+        <div class="mb-3">
+          <div class="h5">Wallet Address</div>
+          <div class="input-box">
+            <input
+              id="textBox"
+              class="form-control form-control-lg"
+              type="text"
+              placeholder="0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              aria-label=".form-control-lg example"
+            />
+            <button id="paste" onclick="paste()">Paste</button>
+          </div>
+        </div>
+        <button
+          id="button"
+          type="button"
+          class="btn btn-primary mb-3"
+          onclick="getCoin()"
+        >
+          Submit
+        </button>
       </div>
+    </main>
 
-
-    </div>
-
-
-  </main>
-
-  <script>
-    const walletAddress = document.getElementById('input1').value
-    console.log(walletAddress)
-
-    function event_pass() {
-      /*
-      const regExp_Address = /^[A-Za-z0-9]/g
-      if (!regExp_Address.test(walletAddress)) {
-        alert("invalid Details")
-        walletAddress.focus();
-        return
+    <footer><%- include('../partials/footer'); %></footer>
+    <script>
+      // Send Request Address
+      function getCoin() {
+        $.ajax({
+          url: "api/address",
+          data: { address: $("#textBox").val() },
+          method: "POST",
+          dataType: "json"
+        });
       }
-      */
-
-      $.ajax({
-        type: "POST",
-        url: "/address",
-        data: {
-          
-        },
-        dataType: "json",
-        success: function (json) {
-          if (json) {
-            if (json.result == true) {
-              alert("전송완료");
-              reset();
-            }
-          }
-          return
-        }
-      })
-    }
-
-
-  </script>
-
-  <footer>
-    <%- include('../partials/footer'); %>
-  </footer>
-
-</body>
-
+      
+    </script>
+  </body>
 </html>

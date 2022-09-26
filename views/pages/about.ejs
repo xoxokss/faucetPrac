@@ -1,42 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
 
-<head>
-  <%- include('../partials/head'); %>
-</head>
+  <body class="container">
+    <header><%- include('../partials/header'); %></header>
 
-<body class="container">
-
-  <header>
-    <%- include('../partials/header'); %>
-  </header>
-
-  <main>
-    <div class="jumbotron">
-      <h3>About Page</h3>
-      <div class="description">This faucet transfers TestToken on Chrono testnets and parent chain. Confirm details
-        before submitting.</div>
-      <div class="h5">Chrono Network NCG Token</div>
-      <div class="mb-3">
-        <div class="h5">Wallet Address</div>
-        <div class="input-box">
-          <input class="form-control form-control-lg" type="text" placeholder="0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-            aria-label=".form-control-lg example">
-          <button type="submit" class="btn btn-primary mb-3">Paste</button>
+    <main>
+      <div class="jumbotron">
+        <h3>About Page</h3>
+        <div class="description">
+          This faucet transfers TestToken on Chrono testnets and parent chain.
+          Confirm details before submitting.
         </div>
-
+        <div class="h5">Chrono Network NCG Token</div>
+        <div class="mb-3">
+          <div class="h5">Wallet Address</div>
+          <div class="input-box">
+            <input
+              id="test"
+              class="form-control form-control-lg"
+              type="text"
+              placeholder="0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+              aria-label=".form-control-lg example"
+            />
+            <button id="button" type="submit" class="btn btn-primary mb-3">
+              Paste
+            </button>
+            <p id="p1"></p>
+          </div>
+        </div>
+        <button
+          id="button"
+          type="button"
+          class="btn btn-primary mb-3"
+          onclick="getCoin()"
+        >
+          Submit
+        </button>
       </div>
+    </main>
 
+    <footer><%- include('../partials/footer'); %></footer>
+    <script>
+      function getCoin() {
+        const input = document.querySelector("#test");
 
-    </div>
+        $.ajax({
+          url: "api/address",
+          data: { address: $("#test").val() },
+          method: "POST",
+          dataType: "json",
+          
+        })
+        .done(function(json){
+          console.log(json)
+          const receiveData = json.data
+          alert(receiveData)
+        })
+      }
 
+      function paste() {
+        // https://javascript.plainenglish.io/how-to-copy-paste-text-into-clipboard-using-javascript-1bb5f96325e8
+        // https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+      }
 
-  </main>
-
-  <footer>
-    <%- include('../partials/footer'); %>
-  </footer>
-
-</body>
-
+      function receive() {}
+    </script>
+  </body>
 </html>

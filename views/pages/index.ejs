@@ -19,13 +19,16 @@
           <div class="h5">Wallet Address</div>
           <div class="input-box">
             <input
-              id="textBox"
+              id="test"
               class="form-control form-control-lg"
               type="text"
               placeholder="0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
               aria-label=".form-control-lg example"
             />
-            <button id="paste" onclick="paste()">Paste</button>
+            <button id="button" type="submit" class="btn btn-primary mb-3">
+              Paste
+            </button>
+            <p id="p1"></p>
           </div>
         </div>
         <button
@@ -41,16 +44,26 @@
 
     <footer><%- include('../partials/footer'); %></footer>
     <script>
-      // Send Request Address
       function getCoin() {
+        const input = document.querySelector("#test");
+
         $.ajax({
           url: "api/address",
-          data: { address: $("#textBox").val() },
+          data: { address: $("#test").val() },
           method: "POST",
-          dataType: "json"
-        });
+          dataType: "json",
+          
+        })
+        .done(function(json){
+          console.log("receive : ", json.data)
+          const receiveData = json.data
+          //alert(receiveData)
+        })
       }
-      
+
+      function paste() {
+
+      }
     </script>
   </body>
 </html>

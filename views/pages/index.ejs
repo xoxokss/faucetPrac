@@ -19,13 +19,19 @@
           <div class="h5">Wallet Address</div>
           <div class="input-box">
             <input
-              id="test"
+              id="txtAddress"
               class="form-control form-control-lg"
               type="text"
               placeholder="0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
               aria-label=".form-control-lg example"
+              required
+              pattern="a-zA-Z"
             />
-            <button id="button" type="submit" class="btn btn-primary mb-3">
+            <button
+              id="pasteButton"
+              class="btn btn-primary mb-3"
+              onclick="paste()"
+            >
               Paste
             </button>
             <p id="p1"></p>
@@ -44,25 +50,31 @@
 
     <footer><%- include('../partials/footer'); %></footer>
     <script>
-      function getCoin() {
-        const input = document.querySelector("#test");
-
-        $.ajax({
-          url: "api/address",
-          data: { address: $("#test").val() },
-          method: "POST",
-          dataType: "json",
-          
-        })
-        .done(function(json){
-          console.log("receive : ", json.data)
-          const receiveData = json.data
-          //alert(receiveData)
-        })
+      const validation = /^[a-zA-Z0-9\s]+$/g;
+    
+      function paste() {
+        navigator.clipboard
+          .readText()
+          .then((e) => (document.getElementById("txtAddress").value = e));
       }
 
-      function paste() {
-
+      function getCoin() {
+        // Validation
+        const x = $("#txtAddress").val();
+        if (!x.match(validation)) {
+          alert("invalid data");
+        } else {
+          $.ajax({
+            url: "api/address",
+            data: { address: $("#txtAddress").val().replace(/ /g,"")},
+            method: "POST",
+            dataType: "json",
+          }).done(function (json) {
+            console.log("receive : ", json.data);
+            const receiveData = json.data;
+            //alert(receiveData)
+          });
+        }
       }
     </script>
   </body>

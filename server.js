@@ -16,6 +16,11 @@ app.get("/about", function (req, res) {
   res.render("pages/about");
 });
 
+// sub page
+app.get("/sub", function (req, res) {
+  res.render("pages/sub");
+});
+
 // body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

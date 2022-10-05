@@ -17,16 +17,17 @@
         <div class="h5">Chrono Network NCG Token</div>
         <div class="mb-3">
           <div class="h5">Wallet Address</div>
-          <div class="input-box">
+        </div>
+        <div class="input-box">
+          <div class="input-box-input">
             <input
               id="txtAddress"
               class="form-control form-control-lg"
               type="text"
               placeholder="0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-              aria-label=".form-control-lg example"
-              required
-              pattern="a-zA-Z"
             />
+          </div>
+          <div class="input-box-paste">
             <button
               id="pasteButton"
               class="btn btn-primary mb-3"
@@ -34,45 +35,55 @@
             >
               Paste
             </button>
-            <p id="p1"></p>
           </div>
         </div>
-        <button
-          id="button"
-          type="button"
-          class="btn btn-primary mb-3"
-          onclick="getCoin()"
-        >
-          Submit
-        </button>
+        <div class="submit">
+          <button
+            id="button"
+            type="button"
+            class="btn btn-primary mb-3"
+            onclick="getCoin()"
+          >
+            Submit
+          </button>
+        </div>
+        <div id="result"></div>
       </div>
     </main>
 
     <footer><%- include('../partials/footer'); %></footer>
     <script>
-      const validation = /^[a-zA-Z0-9\s]+$/g;
-    
+      //Paste button
       function paste() {
-        navigator.clipboard
-          .readText()
-          .then((e) => (document.getElementById("txtAddress").value = e));
+        navigator.clipboard.readText().then((e) => {
+          if (e.substr(0, 2) === "0x") {
+            document.getElementById("txtAddress").value = e.substr(2);
+          }
+          document.getElementById("txtAddress").value = e;
+        });
       }
 
+      //Submit button
       function getCoin() {
         // Validation
+        const validation = /^[a-zA-Z0-9\s]+$/g;
         const x = $("#txtAddress").val();
         if (!x.match(validation)) {
           alert("invalid data");
-        } else {
+        } 
+        /*
+        else if (x.substr(0, 2) === "0x") {
+          alert("지갑 주소 첫번째 문자에는 0x가 없어야 합니다.");
+        } 
+        */
+        else {
           $.ajax({
             url: "api/address",
-            data: { address: $("#txtAddress").val().replace(/ /g,"")},
+            data: { address: $("#txtAddress").val().replace(/ /g, "") },
             method: "POST",
             dataType: "json",
-          }).done(function (json) {
-            console.log("receive : ", json.data);
-            const receiveData = json.data;
-            //alert(receiveData)
+          }).done(function (receiveData) {
+            $("#result").html(receiveData.data);
           });
         }
       }

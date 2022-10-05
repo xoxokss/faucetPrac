@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 
+
 // set the view engine to ejs
 app.set("view engine", "ejs");
 
@@ -14,11 +15,6 @@ app.get("/", function (req, res) {
 // about page
 app.get("/about", function (req, res) {
   res.render("pages/about");
-});
-
-// sub page
-app.get("/sub", function (req, res) {
-  res.render("pages/sub");
 });
 
 // body parser

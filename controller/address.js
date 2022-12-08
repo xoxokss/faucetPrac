@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 const { request } = require("graphql-request");
 
-router.post("/address", async (req, res) => {
+router.post("/getcoin", async (req, res) => {
   const address = req.body.address;
-
+console.log("getcoin api 호출", address)
   // graphql request
-  const endpoint = "http://qa-aug-gql.433live.com:38080/graphql";
+  const endpoint = "https://qa-aug-gql.433live.com:38080/graphql";
   const query = `
   mutation
   {
@@ -26,7 +26,7 @@ router.post("/address", async (req, res) => {
       res.json({ data: data.transferAsset.id });
     })
     .catch((err) => {
-      console.log(JSON.stringify(err,undefined,2));
+      console.log("graphql error log", JSON.stringify(err,undefined,2));
       res.json({ data: "fail" });
     });
 });

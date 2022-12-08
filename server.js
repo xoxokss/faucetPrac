@@ -12,11 +12,6 @@ app.get("/", function (req, res) {
   res.render("pages/index");
 });
 
-// about page
-app.get("/about", function (req, res) {
-  res.render("pages/about");
-});
-
 // body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -24,6 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 // controller
 const addressController = require("./controller/address");
 app.use("/api", addressController);
+
 
 app.listen(8003);
 console.log("Server is listening on port 8003");

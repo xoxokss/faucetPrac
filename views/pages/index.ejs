@@ -9,25 +9,22 @@
 
     <main>
       <div class="jumbotron">
-        <h3>Home Page</h3>
-        <div class="description">
-          This faucet transfers TestToken on Chrono testnets and parent chain.
-          Confirm details before submitting.
-        </div>
-        <div class="h5">Chrono Network NCG Token</div>
-        <div class="mb-3">
-          <div class="h5">Wallet Address</div>
-        </div>
+        <h3>LipPlanet Faucet</h3>
+
         <div class="input-box">
-          <div class="input-box-input">
+          <div class="h6">Wallet Address</div>
+          <div
+            class="input-box-input"
+            style="width: 80%; float: left; margin-right: 5px"
+          >
             <input
               id="txtAddress"
-              class="form-control form-control-lg"
               type="text"
+              class="form-control"
               placeholder="0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
             />
           </div>
-          <div class="input-box-paste">
+          <div class="input-box-paste" style="float: left; margin-right: 5px">
             <button
               id="pasteButton"
               class="btn btn-primary mb-3"
@@ -36,16 +33,16 @@
               Paste
             </button>
           </div>
-        </div>
-        <div class="submit">
-          <button
-            id="button"
-            type="button"
-            class="btn btn-primary mb-3"
-            onclick="getCoin()"
-          >
-            Submit
-          </button>
+          <div class="submit" style="float: left">
+            <button
+              id="button"
+              type="submit"
+              class="btn btn-primary mb-3"
+              onclick="getCoin()"
+            >
+              Submit
+            </button>
+          </div>
         </div>
         <div id="result"></div>
       </div>
@@ -53,7 +50,31 @@
 
     <footer><%- include('../partials/footer'); %></footer>
     <script>
-      //Paste button
+      //Submit button
+      function getCoin() {
+        // Validation
+        const validation = /^[a-zA-Z0-9\s]+$/g;
+        const x = $("#txtAddress").val();
+        if (!x.match(validation)) {
+          alert("invalid data");
+        } else {
+          $.ajax({
+            url: "api/getcoin",
+            data: { address: $("#txtAddress").val().replace(/ /g, "") },
+            method: "POST",
+            dataType: "json",
+          }).done(function (receiveData) {
+            const output = receiveData.data;
+            console.log(output)
+            $("#result").html(
+              `<a href='https://qa-aug-gql.433live.com:8000/tx/${receiveData.data}' target='_blank'>${receiveData.data}</a>`
+            );
+          });
+        }
+      }
+          
+      //Paste button 
+      //clipboard.readText() 메서드는 HTTPS 환경에서 사용 가능합니다.
       function paste() {
         navigator.clipboard.readText().then((e) => {
           if (e.substr(0, 2) === "0x") {
@@ -62,31 +83,7 @@
           document.getElementById("txtAddress").value = e;
         });
       }
-
-      //Submit button
-      function getCoin() {
-        // Validation
-        const validation = /^[a-zA-Z0-9\s]+$/g;
-        const x = $("#txtAddress").val();
-        if (!x.match(validation)) {
-          alert("invalid data");
-        } 
-        /*
-        else if (x.substr(0, 2) === "0x") {
-          alert("지갑 주소 첫번째 문자에는 0x가 없어야 합니다.");
-        } 
-        */
-        else {
-          $.ajax({
-            url: "api/address",
-            data: { address: $("#txtAddress").val().replace(/ /g, "") },
-            method: "POST",
-            dataType: "json",
-          }).done(function (receiveData) {
-            $("#result").html(receiveData.data);
-          });
-        }
-      }
+      
     </script>
   </body>
 </html>
